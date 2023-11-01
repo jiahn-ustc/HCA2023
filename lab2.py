@@ -274,8 +274,8 @@ if __name__ == "__main__":
     instructions = [0x00200093, 0x06400113, 0x3e700193, 0x0201c063, 0x00219213,
                     0x002202b3, 0x0002a303, 0x00130333, 0x0062a023, 0xfff18193, 0xfe5ff3ef]
 
-    print(type(instructions[0]))
-    print(instructions[9])
+    #print(type(instructions[0]))
+    #print(instructions[9])
     cpu = CPU()
     for i in range(len(instructions)):
         cpu.write_memory(4*i, instructions[i])
