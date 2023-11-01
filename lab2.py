@@ -9,11 +9,6 @@
 '''
 
 
-'''
-    a[2] = 1
-    for(i =0;i<100;i++)
-        a[2] = a[2] + 1
-'''
 
 '''
 main:
@@ -32,21 +27,6 @@ c	blt x3,x0,end           0201c063
 
 end:
 
-main:
-	addi,x1,x0,2            
-	addi x2,x0,100          
-	addi x3,x0,999          
-Loop:
-	blt x3,x0,end           
-	slli,x4,x3,4            
-	add x5,x4,x2            
-	lw x6,0(x5)             
-	add x6,x6,x1            
-	sw x6,0(x5)             
-	addi x3,x3,-1           
-	jal Loop                
-
-end:
 '''
 
 
