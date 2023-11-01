@@ -31,7 +31,7 @@ end:
 
 
 class CPU:
-    def __init__(self, memory_size=5120):
+    def __init__(self, memory_size=8192):
         self.registers = [0]*32  # register cell 4 byte
         self.pc = 0
         self.memory = [0] * memory_size  # memory cell 1 byte
@@ -285,3 +285,7 @@ if __name__ == "__main__":
     # for i in range(100, 100+1000):
     #     print(cpu.memory[i])
     cpu.cpu_print()
+    # for i in range(0,5120):
+    #     if(cpu.memory[i]==2):
+    #         print(i)
+    
