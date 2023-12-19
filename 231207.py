@@ -128,7 +128,7 @@ class Tomasulo:
 
         elif new_ir[0]=="ADD.D":
             #print('-----------debug----------')
-            self.reg_result_status["F0"].print_status()
+            #self.reg_result_status["F0"].print_status()
             new_ir_item.Vj = new_ir[2]
             new_ir_item.Vk = new_ir[3]
             if new_ir[2] not in self.reg_result_status.keys() or not self.reg_result_status[new_ir[2]].Busy:
