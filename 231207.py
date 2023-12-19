@@ -54,6 +54,7 @@ class reservation_station_item:
 
 class rob_status():
     def __init__(self,instruction):
+        self.iters = 0
         self.instruction = instruction
         self.State = "Issue"
         self.is_write_CDB_just_now = False
@@ -92,6 +93,7 @@ class Tomasulo:
         self.head = 0
         self.tail = -1
         self.clock = 0
+        self.iters = 0
     
     def load_irs(self,instructions):
         self.instructions = instructions
@@ -230,13 +232,26 @@ class Tomasulo:
             ir = rob_item.instruction
             Issue = rob_item.issue_cycle
             Exec = rob_item.exec_cycle
-            # if rob_item.instruction[0]=="ADD.D":
-            #     usage_table[]
+            iters = rob_item.iters
+            if rob_item.instruction[0]=="ADD.D":
+                usage_table[Exec-1][2] += str(iters)+"/ADD.D "
+                usage_table[Exec][2] += str(iters)+"/ADD.D "
+                usage_table[Exec+1][2] += str(iters)+"/ADD.D "
+            else:
+                usage_table[Exec-1][1] += str(iters)+"/"+ir[0]+" "
+            
             Mem = rob_item.mem_cycle
+            # print('Mem:',Mem)
+            if Mem != 0:
+                usage_table[Mem-1][3] += str(iters)+"/"+ir[0]+" "
+            
             Write_CDB = rob_item.write_CDB_cycle
-            
+
+            if Write_CDB != 0:
+                usage_table[Write_CDB-1][4] += str(iters)+"/"+ir[0]+" "
             # Commit = rob_item.commit_cycle
-            
+        for i in range(len(usage_table)):
+            tb_usage.add_row(usage_table[i])
             #tb_ir.add_row([ir,Issue,Exec,Mem,Write_CDB])
 
         print(tb_usage)
@@ -405,6 +420,7 @@ class Tomasulo:
             # update rob
             self.rob.append([self.tail,rob_status(new_ir1)])
             self.rob[self.tail][1].issue_cycle = self.clock
+            self.rob[self.tail][1].iters = self.iters
             # #非SD和BNE指令更新reg_result_status
             # if new_ir1[0]!="BNE" and new_ir1[0]!="SD":
             #     self.reg_result_status[new_ir1[1]]=reg_result_status_item(self.tail)
@@ -421,6 +437,7 @@ class Tomasulo:
             #update rob
             self.rob.append([self.tail,rob_status(new_ir2)])
             self.rob[self.tail][1].issue_cycle = self.clock
+            self.rob[self.tail][1].iters = self.iters
             # if new_ir2[0]!="BNE" and new_ir2[0]!="SD":
             #     #非SD和BNE指令更新reg_result_status
             #     self.reg_result_status[new_ir2[1]]=reg_result_status_item(self.tail)
@@ -471,6 +488,7 @@ class Tomasulo:
     def run(self,instructions):
         self.load_irs(instructions)
         for iters in range(1,4):
+            self.iters = iters
             i=0
             while True:
                 if i>=len(self.instructions):
